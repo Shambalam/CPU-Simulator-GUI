@@ -34,9 +34,14 @@ namespace CpuSchedulingWinForms
                                                        "Burst time for P" + (num + 1),
                                                        "",
                                                        -1, -1);
-
-                    bp[num] = Convert.ToInt64(input);
-
+                    try
+                    {
+                        bp[num] = Convert.ToInt64(input);
+                    }
+                    catch
+                    { 
+                        num--; // Inproper format catch
+                    }
                     //var input = Console.ReadLine();
                     //bp[num] = Convert.ToInt32(input);
                 }
