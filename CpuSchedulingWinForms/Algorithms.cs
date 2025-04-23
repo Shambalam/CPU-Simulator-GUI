@@ -72,6 +72,96 @@ namespace CpuSchedulingWinForms
                 //frm.ShowDialog();
             }
         }
+        public static void mlfqAlgorithm(string userInput)
+        {
+            int np = Convert.ToInt16(userInput);
+            int[] queueLevels = { 4, 8, int.MaxValue }; // time quantums per level
+
+            double[] arrivalTime = new double[np];
+            double[] burstTime = new double[np];
+            double[] remainingTime = new double[np];
+            int[] queue = new int[np];
+            double[] completionTime = new double[np];
+            double[] turnaroundTime = new double[np];
+            double[] waitingTime = new double[np];
+
+            for (int i = 0; i < np; i++)
+            {
+                arrivalTime[i] = Convert.ToDouble(Microsoft.VisualBasic.Interaction.InputBox("Enter arrival time:", $"Arrival Time for P{i + 1}"));
+                burstTime[i] = Convert.ToDouble(Microsoft.VisualBasic.Interaction.InputBox("Enter burst time:", $"Burst Time for P{i + 1}"));
+                remainingTime[i] = burstTime[i];
+                queue[i] = 0; // all processes start in highest priority queue
+            }
+
+            int currentTime = 0;
+            int completed = 0;
+
+            while (completed < np)
+            {
+                bool found = false;
+
+                for (int level = 0; level < 3; level++)
+                {
+                    for (int i = 0; i < np; i++)
+                    {
+                        if (arrivalTime[i] <= currentTime && remainingTime[i] > 0 && queue[i] == level)
+                        {
+                            found = true;
+                            int tq = queueLevels[level];
+                            int execTime = (int)Math.Min(tq, remainingTime[i]);
+
+                            for (int t = 0; t < execTime; t++)
+                            {
+                                currentTime++;
+                                remainingTime[i]--;
+
+                                // Check for newly arrived processes and promote if needed
+                                for (int j = 0; j < np; j++)
+                                {
+                                    if (arrivalTime[j] == currentTime && remainingTime[j] > 0 && queue[j] == 0)
+                                        queue[j] = 0;
+                                }
+
+                                if (remainingTime[i] == 0)
+                                    break;
+                            }
+
+                            if (remainingTime[i] == 0)
+                            {
+                                completionTime[i] = currentTime;
+                                turnaroundTime[i] = completionTime[i] - arrivalTime[i];
+                                waitingTime[i] = turnaroundTime[i] - burstTime[i];
+                                completed++;
+                            }
+                            else if (level < 2)
+                            {
+                                queue[i]++; // demote to next lower priority queue
+                            }
+
+                            break; // after scheduling one process, restart loop
+                        }
+                    }
+
+                    if (found)
+                        break;
+                }
+
+                if (!found)
+                    currentTime++; // no process ready — idle time
+            }
+
+            double totalWT = 0, totalTAT = 0;
+            for (int i = 0; i < np; i++)
+            {
+                totalWT += waitingTime[i];
+                totalTAT += turnaroundTime[i];
+                MessageBox.Show($"P{i + 1} → Waiting Time: {waitingTime[i]} | Turnaround Time: {turnaroundTime[i]}", $"Process {i + 1}");
+            }
+
+            MessageBox.Show($"Average Waiting Time: {totalWT / np}", "MLFQ Result");
+            MessageBox.Show($"Average Turnaround Time: {totalTAT / np}", "MLFQ Result");
+        }
+
 
         public static void sjfAlgorithm(string userInput)
         {
@@ -345,6 +435,76 @@ namespace CpuSchedulingWinForms
                 MessageBox.Show("Average turnaround time for " + np + " processes: " + averageTurnaroundTime + " sec(s)", "", MessageBoxButtons.OK);
             }
         }
+
+
+        public static void srtfAlgorithm(string userInput)
+        {
+            int np = Convert.ToInt16(userInput);
+
+            double[] arrivalTime = new double[np];
+            double[] burstTime = new double[np];
+            double[] remainingTime = new double[np];
+            double[] completionTime = new double[np];
+            double[] waitingTime = new double[np];
+            double[] turnaroundTime = new double[np];
+
+            for (int i = 0; i < np; i++)
+            {
+                arrivalTime[i] = Convert.ToDouble(Microsoft.VisualBasic.Interaction.InputBox("Enter arrival time:", $"Arrival Time for P{i + 1}"));
+                burstTime[i] = Convert.ToDouble(Microsoft.VisualBasic.Interaction.InputBox("Enter burst time:", $"Burst Time for P{i + 1}"));
+                remainingTime[i] = burstTime[i];
+            }
+
+            int complete = 0;
+            int t = 0;
+            int shortest = -1;
+            bool found = false;
+
+            while (complete != np)
+            {
+                double min = double.MaxValue;
+                found = false;
+
+                for (int j = 0; j < np; j++)
+                {
+                    if (arrivalTime[j] <= t && remainingTime[j] > 0 && remainingTime[j] < min)
+                    {
+                        min = remainingTime[j];
+                        shortest = j;
+                        found = true;
+                    }
+                }
+
+                if (!found)
+                {
+                    t++;
+                    continue;
+                }
+
+                remainingTime[shortest]--;
+                if (remainingTime[shortest] == 0)
+                {
+                    complete++;
+                    completionTime[shortest] = t + 1;
+                    turnaroundTime[shortest] = completionTime[shortest] - arrivalTime[shortest];
+                    waitingTime[shortest] = turnaroundTime[shortest] - burstTime[shortest];
+                }
+
+                t++;
+            }
+
+            double totalWT = 0, totalTAT = 0;
+            for (int i = 0; i < np; i++)
+            {
+                totalWT += waitingTime[i];
+                totalTAT += turnaroundTime[i];
+                MessageBox.Show($"P{i + 1} → Waiting Time: {waitingTime[i]} | Turnaround Time: {turnaroundTime[i]}", $"Process {i + 1}");
+            }
+
+            MessageBox.Show($"Average Waiting Time: {totalWT / np}", "SRTF Result");
+            MessageBox.Show($"Average Turnaround Time: {totalTAT / np}", "SRTF Result");
+        }
     }
+      
 }
 

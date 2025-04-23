@@ -32,6 +32,7 @@
             this.labelProcess = new System.Windows.Forms.Label();
             this.txtProcess = new System.Windows.Forms.TextBox();
             this.fcfs = new System.Windows.Forms.Button();
+            this.srtf = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.btnPriority = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
@@ -67,6 +68,18 @@
             this.fcfs.Text = "FCFS";
             this.fcfs.UseVisualStyleBackColor = true;
             this.fcfs.Click += new System.EventHandler(this.fcfs_Click);
+            // 
+            // srtf
+            // 
+            this.srtf.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.srtf.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.srtf.Location = new System.Drawing.Point(83, 78);
+            this.srtf.Name = "srtf";
+            this.srtf.Size = new System.Drawing.Size(129, 55);
+            this.srtf.TabIndex = 2;
+            this.srtf.Text = "SRTF";
+            this.srtf.UseVisualStyleBackColor = true;
+            this.srtf.Click += new System.EventHandler(this.srtf_Click);
             // 
             // button2
             // 
@@ -115,6 +128,7 @@
             this.Controls.Add(this.btnPriority);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.fcfs);
+            this.Controls.Add(this.srtf);
             this.Controls.Add(this.txtProcess);
             this.Controls.Add(this.labelProcess);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
@@ -136,6 +150,7 @@
         private System.Windows.Forms.Button btnPriority;
         private System.Windows.Forms.Label label1;
         public System.Windows.Forms.TextBox txtProcess;
+        private System.Windows.Forms.Button srtf;
     }
 }
 
