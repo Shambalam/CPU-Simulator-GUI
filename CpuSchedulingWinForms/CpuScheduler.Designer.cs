@@ -65,6 +65,7 @@
             this.pictureBoxCodeOutput = new System.Windows.Forms.PictureBox();
             this.btnBarcode = new System.Windows.Forms.Button();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.mlfq_button = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.tabSelection.SuspendLayout();
@@ -315,6 +316,7 @@
             this.cpuSchedulerTab.BackColor = System.Drawing.SystemColors.InactiveBorder;
             this.cpuSchedulerTab.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("cpuSchedulerTab.BackgroundImage")));
             this.cpuSchedulerTab.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.cpuSchedulerTab.Controls.Add(this.mlfq_button);
             this.cpuSchedulerTab.Controls.Add(this.srtf_button);
             this.cpuSchedulerTab.Controls.Add(this.btnRoundRobin);
             this.cpuSchedulerTab.Controls.Add(this.restartApp);
@@ -554,6 +556,16 @@
             // 
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
+            // mlfq_button
+            // 
+            this.mlfq_button.Location = new System.Drawing.Point(347, 207);
+            this.mlfq_button.Name = "mlfq_button";
+            this.mlfq_button.Size = new System.Drawing.Size(85, 39);
+            this.mlfq_button.TabIndex = 14;
+            this.mlfq_button.Text = "MLQF";
+            this.mlfq_button.UseVisualStyleBackColor = true;
+            this.mlfq_button.Click += new System.EventHandler(this.mlfqButton_Click);
+            // 
             // CpuScheduler
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -622,5 +634,6 @@
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.Button btnSRTF;
         private System.Windows.Forms.Button srtf_button;
+        private System.Windows.Forms.Button mlfq_button;
     }
 }

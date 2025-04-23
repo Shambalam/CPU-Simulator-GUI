@@ -342,6 +342,51 @@ namespace CpuSchedulingWinForms
             }
 
         }
+        private void mlfqButton_Click(object sender, EventArgs e)
+        {
+            if (txtProcess.Text != "")
+            {
+                Algorithms.mlfqAlgorithm(txtProcess.Text);
+                int numberOfProcess = Int16.Parse(txtProcess.Text);
+
+                if (numberOfProcess <= 10)
+                {
+                    this.progressBar1.Increment(4);
+                    this.progressBar1.SetState(1);
+                    this.progressBar2.Increment(13);
+                    this.progressBar2.SetState(1);
+                }
+                else
+                {
+                    this.progressBar1.Increment(15);
+                    this.progressBar1.SetState(1);
+                    this.progressBar2.Increment(38);
+                    this.progressBar2.SetState(3);
+                }
+
+                listView1.Items.Clear();
+                listView1.View = View.Details;
+                listView1.Columns.Add("Process ID", 150, HorizontalAlignment.Center);
+                listView1.Columns.Add("Queue Level", 100, HorizontalAlignment.Center);
+
+                for (int i = 0; i < numberOfProcess; i++)
+                {
+                    var item = new ListViewItem();
+                    item.Text = "Process " + (i + 1);
+                    item.SubItems.Add("-");
+                    listView1.Items.Add(item);
+                }
+
+                listView1.Items.Add("\n");
+                listView1.Items.Add("CPU handles: " + numberOfProcess);
+            }
+            else
+            {
+                MessageBox.Show("Enter number of processes", "", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                txtProcess.Focus();
+            }
+        }
+
         private void btnRoundRobin_Click(object sender, EventArgs e)
         {
             if (txtProcess.Text != "")
