@@ -151,15 +151,34 @@ namespace CpuSchedulingWinForms
             }
 
             double totalWT = 0, totalTAT = 0;
+            double endTime = 0;
+
             for (int i = 0; i < np; i++)
             {
                 totalWT += waitingTime[i];
                 totalTAT += turnaroundTime[i];
-                MessageBox.Show($"P{i + 1} → Waiting Time: {waitingTime[i]} | Turnaround Time: {turnaroundTime[i]}", $"Process {i + 1}");
+
+                if (completionTime[i] > endTime)
+                    endTime = completionTime[i];
             }
 
-            MessageBox.Show($"Average Waiting Time: {totalWT / np}", "MLFQ Result");
-            MessageBox.Show($"Average Turnaround Time: {totalTAT / np}", "MLFQ Result");
+            double avgWT = totalWT / np;
+            double avgTAT = totalTAT / np;
+            double throughput = np / endTime;
+            double cpuBusyTime = 0;
+            for (int i = 0; i < np; i++)
+                cpuBusyTime += burstTime[i];
+
+            double cpuUtilization = (cpuBusyTime / endTime) * 100;
+
+
+            MessageBox.Show($"Average Waiting Time: {avgWT:F2}", "MLFQ Metrics");
+            MessageBox.Show($"Average Turnaround Time: {avgTAT:F2}", "MLFQ Metrics");
+            MessageBox.Show($"Throughput: {throughput:F2} processes/unit time", "MLFQ Metrics");
+
+            MessageBox.Show($"CPU Utilization: {cpuUtilization:F2}%", "Performance Metric");
+
+
         }
 
 
@@ -494,15 +513,32 @@ namespace CpuSchedulingWinForms
             }
 
             double totalWT = 0, totalTAT = 0;
+            double endTime = 0;
+
             for (int i = 0; i < np; i++)
             {
                 totalWT += waitingTime[i];
                 totalTAT += turnaroundTime[i];
-                MessageBox.Show($"P{i + 1} → Waiting Time: {waitingTime[i]} | Turnaround Time: {turnaroundTime[i]}", $"Process {i + 1}");
-            }
 
-            MessageBox.Show($"Average Waiting Time: {totalWT / np}", "SRTF Result");
-            MessageBox.Show($"Average Turnaround Time: {totalTAT / np}", "SRTF Result");
+                if (completionTime[i] > endTime)
+                    endTime = completionTime[i];
+            }
+            double cpuBusyTime = 0;
+            for (int i = 0; i < np; i++)
+                cpuBusyTime += burstTime[i];
+
+            double cpuUtilization = (cpuBusyTime / endTime) * 100;
+
+            double avgWT = totalWT / np;
+            double avgTAT = totalTAT / np;
+            double throughput = np / endTime;
+
+            MessageBox.Show($"Average Waiting Time: {avgWT:F2}", "SRTF Metrics");
+            MessageBox.Show($"Average Turnaround Time: {avgTAT:F2}", "SRTF Metrics");
+            MessageBox.Show($"Throughput: {throughput:F2} processes/unit time", "SRTF Metrics");
+            MessageBox.Show($"CPU Utilization: {cpuUtilization:F2}%", "Performance Metric");
+
+
         }
     }
       
